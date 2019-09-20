@@ -10,7 +10,7 @@ const {
   adminLogin,
   register,
   oAuth,
-  refresh,
+  refresh
 } = require('../../validations/auth.validation');
 
 const router = express.Router();
@@ -132,9 +132,7 @@ router.route('/login').post(basicAuth(), validate(login), controller.login);
  * @apiError (Bad Request 400)  ValidationError  Some parameters may contain invalid values
  * @apiError (Unauthorized 401)  Unauthorized     Incorrect email or password
  */
-router
-  .route('/admin-login')
-  .post(basicAuth(), validate(adminLogin), controller.adminLogin);
+router.route('/admin-login').post(validate(adminLogin), controller.adminLogin);
 
 /**
  * @api {post} v1/auth/refresh-token Refresh Token
