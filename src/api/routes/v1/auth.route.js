@@ -1,13 +1,16 @@
+import { basicAuth } from '../../middlewares/auth';
+
 const express = require('express');
 const validate = require('express-validation');
 const controller = require('../../controllers/auth.controller');
 const oAuthLogin = require('../../middlewares/auth').oAuth;
-import { basicAuth } from '../../middlewares/auth';
+
 const {
   login,
+  adminLogin,
   register,
   oAuth,
-  refresh
+  refresh,
 } = require('../../validations/auth.validation');
 
 const router = express.Router();
@@ -100,6 +103,37 @@ router
  * @apiError (Unauthorized 401)  Unauthorized     Incorrect email or password
  */
 router.route('/login').post(basicAuth(), validate(login), controller.login);
+
+/**
+ * @api {post} v1/auth/admin-login Login To Admin Dashboard
+ * @apiDescription Get an accessToken
+ * @apiVersion 1.0.0
+ * @apiName Admin Login
+ * @apiGroup Auth
+ * @apiPermission public
+ *
+ * @apiParam  {String}         email     User's email
+ * @apiParam  {String{..128}}  password  User's password
+ *
+ * @apiSuccess  {String}  token.tokenType     Access Token's type
+ * @apiSuccess  {String}  token.accessToken   Authorization Token
+ * @apiSuccess  {String}  token.refreshToken  Token to get a new accessToken
+ *                                                   after expiration time
+ * @apiSuccess  {Number}  token.expiresIn     Access Token's expiration time
+ *                                                   in miliseconds
+ *
+ * @apiSuccess  {String}  user.id             User's id
+ * @apiSuccess  {String}  user.name           User's name
+ * @apiSuccess  {String}  user.email          User's email
+ * @apiSuccess  {String}  user.role           User's role
+ * @apiSuccess  {Date}    user.createdAt      Timestamp
+ *
+ * @apiError (Bad Request 400)  ValidationError  Some parameters may contain invalid values
+ * @apiError (Unauthorized 401)  Unauthorized     Incorrect email or password
+ */
+router
+  .route('/admin-login')
+  .post(basicAuth(), validate(adminLogin), controller.adminLogin);
 
 /**
  * @api {post} v1/auth/refresh-token Refresh Token

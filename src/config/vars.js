@@ -3,7 +3,7 @@ const path = require('path');
 // import .env variables
 require('dotenv-safe').config({
   path: path.join(__dirname, '../../.env'),
-  sample: path.join(__dirname, '../../.env.example')
+  sample: path.join(__dirname, '../../.env.example'),
 });
 
 module.exports = {
@@ -15,9 +15,9 @@ module.exports = {
     uri:
       process.env.NODE_ENV === 'test'
         ? process.env.MONGO_URI_TESTS
-        : process.env.MONGO_URI
+        : process.env.MONGO_URI,
   },
   logs: process.env.NODE_ENV === 'production' ? 'combined' : 'dev',
   basicAuthName: process.env.BASIC_AUTH_NAME,
-  basicAuthPass: process.env.BASIC_AUTH_PASS
+  basicAuthPass: process.env.BASIC_AUTH_PASS,
 };

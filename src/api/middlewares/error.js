@@ -12,7 +12,7 @@ const handler = (err, req, res, next) => {
     code: err.status,
     message: err.message || httpStatus[err.status],
     errors: err.errors,
-    stack: err.stack
+    stack: err.stack,
   };
 
   if (env !== 'development') {
@@ -36,13 +36,13 @@ exports.converter = (err, req, res, next) => {
       message: 'Validation Error',
       errors: err.errors,
       status: err.status,
-      stack: err.stack
+      stack: err.stack,
     });
   } else if (!(err instanceof APIError)) {
     convertedError = new APIError({
       message: err.message,
       status: err.status,
-      stack: err.stack
+      stack: err.stack,
     });
   }
 
@@ -56,7 +56,7 @@ exports.converter = (err, req, res, next) => {
 exports.notFound = (req, res, next) => {
   const err = new APIError({
     message: 'Not found',
-    status: httpStatus.NOT_FOUND
+    status: httpStatus.NOT_FOUND,
   });
   return handler(err, req, res);
 };

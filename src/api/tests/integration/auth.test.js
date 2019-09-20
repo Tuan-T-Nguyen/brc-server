@@ -12,12 +12,12 @@ const authProviders = require('../../services/authProviders');
 const sandbox = sinon.createSandbox();
 
 const fakeOAuthRequest = () => Promise.resolve({
-  service: 'facebook',
-  id: '123',
-  name: 'user',
-  email: 'test@test.com',
-  picture: 'test.jpg',
-});
+    service: 'facebook',
+    id: '123',
+    name: 'user',
+    email: 'test@test.com',
+    picture: 'test.jpg',
+  });
 
 describe('Authentication API', () => {
   let dbUser;
@@ -40,17 +40,23 @@ describe('Authentication API', () => {
     };
 
     refreshToken = {
-      token: '5947397b323ae82d8c3a333b.c69d0435e62c9f4953af912442a3d064e20291f0d228c0552ed4be473e7d191ba40b18c2c47e8b9d',
+      token:
+        '5947397b323ae82d8c3a333b.c69d0435e62c9f4953af912442a3d064e20291f0d228c0552ed4be473e7d191ba40b18c2c47e8b9d',
       userId: '5947397b323ae82d8c3a333b',
       userEmail: dbUser.email,
-      expires: moment().add(1, 'day').toDate(),
+      expires: moment()
+        .add(1, 'day')
+        .toDate(),
     };
 
     expiredRefreshToken = {
-      token: '5947397b323ae82d8c3a333b.c69d0435e62c9f4953af912442a3d064e20291f0d228c0552ed4be473e7d191ba40b18c2c47e8b9d',
+      token:
+        '5947397b323ae82d8c3a333b.c69d0435e62c9f4953af912442a3d064e20291f0d228c0552ed4be473e7d191ba40b18c2c47e8b9d',
       userId: '5947397b323ae82d8c3a333b',
       userEmail: dbUser.email,
-      expires: moment().subtract(1, 'day').toDate(),
+      expires: moment()
+        .subtract(1, 'day')
+        .toDate(),
     };
 
     await User.remove({});
@@ -168,7 +174,7 @@ describe('Authentication API', () => {
         });
     });
 
-    it('should report error when email and password don\'t match', () => {
+    it("should report error when email and password don't match", () => {
       dbUser.password = 'xxx';
       return request(app)
         .post('/v1/auth/login')
@@ -289,7 +295,7 @@ describe('Authentication API', () => {
         });
     });
 
-    it('should report error when email and refreshToken don\'t match', async () => {
+    it("should report error when email and refreshToken don't match", async () => {
       await RefreshToken.create(refreshToken);
       return request(app)
         .post('/v1/auth/refresh-token')

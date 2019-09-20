@@ -1,4 +1,5 @@
 import basicAuth from 'express-basic-auth';
+
 const httpStatus = require('http-status');
 const passport = require('passport');
 const User = require('../models/user.model');
@@ -14,7 +15,7 @@ const handleJWT = (req, res, next, roles) => async (err, user, info) => {
   const apiError = new APIError({
     message: error ? error.message : 'Unauthorized',
     status: httpStatus.UNAUTHORIZED,
-    stack: error ? error.stack : undefined
+    stack: error ? error.stack : undefined,
   });
 
   try {
@@ -46,21 +47,18 @@ const handleJWT = (req, res, next, roles) => async (err, user, info) => {
 exports.ADMIN = ADMIN;
 exports.LOGGED_USER = LOGGED_USER;
 
-exports.authorize = (roles = User.roles) => (req, res, next) =>
-  passport.authenticate(
+exports.authorize = (roles = User.roles) => (req, res, next) => passport.authenticate(
     'jwt',
     { session: false },
-    handleJWT(req, res, next, roles)
+    handleJWT(req, res, next, roles),
   )(req, res, next);
 
-exports.oAuth = service => passport.authenticate(service, { session: false });
+exports.oAuth = (service) => passport.authenticate(service, { session: false });
 
-exports.basicAuth = () => {
-  return basicAuth({
+exports.basicAuth = () => basicAuth({
     authorizer: basicAuthorizer,
-    unauthorizedResponse: getUnauthorizedBasicResponse
+    unauthorizedResponse: getUnauthorizedBasicResponse,
   });
-};
 
 const basicAuthorizer = (username, password) => {
   const userMathches = basicAuth.safeCompare(username, basicAuthName);
@@ -68,8 +66,6 @@ const basicAuthorizer = (username, password) => {
   return userMathches && passwordMatches;
 };
 
-const getUnauthorizedBasicResponse = req => {
-  return req.auth
+const getUnauthorizedBasicResponse = (req) => (req.auth
     ? 'Credentials ' + req.auth.user + ':' + req.auth.password + ' rejected'
-    : 'No credentials provided';
-};
+    : 'No credentials provided');

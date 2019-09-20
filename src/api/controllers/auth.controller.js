@@ -1,9 +1,10 @@
+import { omit } from 'lodash';
+
 const httpStatus = require('http-status');
 const moment = require('moment-timezone');
 const User = require('../models/user.model');
 const RefreshToken = require('../models/refreshToken.model');
 const { jwtExpirationInterval } = require('../../config/vars');
-import { omit } from 'lodash';
 
 /**
  * Returns a formated object with tokens
@@ -17,7 +18,7 @@ function generateTokenResponse(user, accessToken) {
     tokenType,
     accessToken,
     refreshToken,
-    expiresIn
+    expiresIn,
   };
 }
 
@@ -71,6 +72,17 @@ exports.login = async (req, res, next) => {
   }
 };
 
+exports.adminLogin = async (req, res, next) => {
+  try {
+    const { user, accessToken } = await User.findAndGenerateToken(req.body);
+    const token = generateTokenResponse(user, accessToken);
+    const userTransformed = user.transform();
+    return res.json({ token, user: userTransformed });
+  } catch (error) {
+    return next(error);
+  }
+};
+
 /**
  * login with an existing user or creates a new one if valid accessToken token
  * Returns jwt token
@@ -97,11 +109,11 @@ exports.refresh = async (req, res, next) => {
     const { email, refreshToken } = req.body;
     const refreshObject = await RefreshToken.findOneAndRemove({
       userEmail: email,
-      token: refreshToken
+      token: refreshToken,
     });
     const { user, accessToken } = await User.findAndGenerateToken({
       email,
-      refreshObject
+      refreshObject,
     });
     const response = generateTokenResponse(user, accessToken);
     return res.json(response);
