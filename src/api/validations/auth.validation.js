@@ -38,7 +38,7 @@ module.exports = {
         .required()
         .max(128),
       role: Joi.string()
-        .valid(User.roles)
+        .valid(['admin'])
         .required(),
     },
   },

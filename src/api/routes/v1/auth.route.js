@@ -114,6 +114,7 @@ router.route('/login').post(basicAuth(), validate(login), controller.login);
  *
  * @apiParam  {String}         email     User's email
  * @apiParam  {String{..128}}  password  User's password
+ * @apiParam  {String{admin}}         role      User's role
  *
  * @apiSuccess  {String}  token.tokenType     Access Token's type
  * @apiSuccess  {String}  token.accessToken   Authorization Token
