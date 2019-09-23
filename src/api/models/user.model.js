@@ -12,7 +12,6 @@ const { env, jwtSecret, jwtExpirationInterval } = require('../../config/vars');
  * User Roles
  */
 const roles = ['user', 'admin'];
-
 /**
  * User Schema
  * @private
@@ -57,7 +56,6 @@ const userSchema = new mongoose.Schema(
     timestamps: true,
   },
 );
-
 /**
  * Add your
  * - pre-save hooks
@@ -78,7 +76,6 @@ userSchema.pre('save', async function save(next) {
     return next(error);
   }
 });
-
 /**
  * Methods
  */
@@ -109,13 +106,11 @@ userSchema.method({
     return bcrypt.compare(password, this.password);
   },
 });
-
 /**
  * Statics
  */
 userSchema.statics = {
   roles,
-
   /**
    * Get user
    *
@@ -141,7 +136,6 @@ userSchema.statics = {
       throw error;
     }
   },
-
   /**
    * Find user by email and tries to generate a JWT token
    *
@@ -182,7 +176,6 @@ userSchema.statics = {
     }
     throw new APIError(err);
   },
-
   /**
    * List users in descending order of 'createdAt' timestamp.
    *
@@ -201,7 +194,6 @@ userSchema.statics = {
       .limit(perPage)
       .exec();
   },
-
   /**
    * Return new validation error
    * if error is a mongoose duplicate key error
@@ -250,7 +242,6 @@ userSchema.statics = {
     });
   },
 };
-
 /**
  * @typedef User
  */

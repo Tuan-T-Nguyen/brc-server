@@ -13,7 +13,7 @@ exports.seedUsers = async (req, res, next) => {
       .status(httpStatus.OK)
       .send(`User seed success! Created ${req.params.count || 10} users!`);
   } catch (e) {
-    next(e);
+    return next(e);
   }
 };
 
@@ -26,6 +26,6 @@ exports.clear = async (req, res, next) => {
     await User.remove();
     return res.status(httpStatus.OK).send('All collections clear');
   } catch (e) {
-    next(e);
+    return next(e);
   }
 };

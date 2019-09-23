@@ -2,6 +2,7 @@ import express from 'express';
 import userRoutes from './user.route';
 import authRoutes from './auth.route';
 import seedRoutes from './seed.route';
+import categoryRoutes from './category.route';
 
 const router = express.Router();
 
@@ -20,6 +21,7 @@ router.use('/docs', express.static('docs'));
 
 router.use('/users', userRoutes);
 router.use('/auth', authRoutes);
+router.use('/categories', categoryRoutes);
 if (isDev || isTest) {
   router.use('/seeds', seedRoutes);
 }
