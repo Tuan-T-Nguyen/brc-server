@@ -38,7 +38,14 @@ const categorySchema = new mongoose.Schema(
 categorySchema.method({
   transform() {
     const transformed = {};
-    const fields = ['id', 'englishName', 'vietnamName', 'type', 'createdAt'];
+    const fields = [
+      'id',
+      'englishName',
+      'vietnamName',
+      'type',
+      'createdAt',
+      'updatedAt',
+    ];
     fields.forEach((field) => {
       transformed[field] = this[field];
     });
@@ -55,7 +62,7 @@ categorySchema.statics = {
    */
   list() {
     return this.find()
-      .sort({ englishName: -1 })
+      .sort({ englishName: 1 })
       .exec();
   },
 };
