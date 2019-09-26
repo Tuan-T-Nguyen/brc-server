@@ -62,8 +62,23 @@ categorySchema.statics = {
    */
   list() {
     return this.find()
-      .sort({ englishName: 1 })
+      .sort({ type: 1, englishName: 1 })
       .exec();
+  },
+  transform() {
+    const transformed = {};
+    const fields = [
+      'id',
+      'englishName',
+      'vietnamName',
+      'type',
+      'createdAt',
+      'updatedAt',
+    ];
+    fields.forEach((field) => {
+      transformed[field] = this[field];
+    });
+    return transformed;
   },
 };
 /**
