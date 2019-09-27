@@ -1,4 +1,6 @@
 import mongoose from 'mongoose';
+import httpStatus from 'http-status';
+import APIError from '../utils/APIError';
 
 /**
  * Types of categories
@@ -57,6 +59,19 @@ categorySchema.method({
  */
 categorySchema.statics = {
   types,
+  async get(id) {
+    let category;
+    if (mongoose.Types.ObjectId.isValid(id)) {
+      category = await this.findById(id).exec();
+    }
+    if (category) {
+      return category;
+    }
+    throw new APIError({
+      message: 'Category does not exist',
+      status: httpStatus.NOT_FOUND,
+    });
+  },
   /**
    * List all categories in descending order of 'englishName'
    */

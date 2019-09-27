@@ -2,7 +2,10 @@ import express from 'express';
 import validate from 'express-validation';
 import controller from '../../controllers/category.controller';
 
-const { createCategory } = require('../../validations/category.validation');
+const {
+  createCategory,
+  updateCategory
+} = require('../../validations/category.validation');
 const { authorize, ADMIN } = require('../../middlewares/auth');
 
 const router = express.Router();
@@ -40,17 +43,47 @@ router
    * @apiParam  {String}     vietnamName  Category's vietnam name
    * @apiParam  {String=fition,non-fiction}  [type]    Category's type
    *
-   * @apiSuccess (Created 201) {String}  id         Category's id
-   * @apiSuccess (Created 201) {String}  englishName       Category's english name
-   * @apiSuccess (Created 201) {String}  vietnamName      Category's vietnam name
-   * @apiSuccess (Created 201) {String}  type       Category's type
-   * @apiSuccess (Created 201) {Date}    createdAt  Timestamp
-   * @apiSuccess (Created 201) {Date}    updatedAt  Timestamp
+   * @apiSuccess {String}  id         Category's id
+   * @apiSuccess {String}  englishName       Category's english name
+   * @apiSuccess {String}  vietnamName      Category's vietnam name
+   * @apiSuccess {String}  type       Category's type
+   * @apiSuccess {Date}    createdAt  Timestamp
+   * @apiSuccess {Date}    updatedAt  Timestamp
    *
    * @apiError (Bad Request 400)   ValidationError  Some parameters may contain invalid values
    * @apiError (Unauthorized 401)  Unauthorized     Only authenticated users can create the data
    * @apiError (Forbidden 403)     Forbidden        Only admins can create the data
    */
   .post(authorize(ADMIN), validate(createCategory), controller.create);
+
+router
+  .route('/:categoryId')
+  /**
+   * @api {patch} v1/categories/:id Update Category
+   * @apiDescription Update some fields of a category document
+   * @apiVersion 1.0.0
+   * @apiName UpdateCategory
+   * @apiGroup Category
+   * @apiPermission admin
+   *
+   * @apiHeader {String} Authorization   User's access token
+   *
+   * @apiParam  {String}             englishName     Category's english name
+   * @apiParam  {String}     vietnamName  Category's vietnam name
+   * @apiParam  {String=fition,non-fiction}  [type]    Category's type
+   *
+   * @apiSuccess {String}  id         Category's id
+   * @apiSuccess {String}  englishName       Category's english name
+   * @apiSuccess {String}  vietnamName      Category's vietnam name
+   * @apiSuccess {String}  type       Category's type
+   * @apiSuccess {Date}    createdAt  Timestamp
+   * @apiSuccess {Date}    updatedAt  Timestamp
+   *
+   * @apiError (Bad Request 400)  ValidationError  Some parameters may contain invalid values
+   * @apiError (Unauthorized 401) Unauthorized Only authenticated users can modify the data
+   * @apiError (Forbidden 403)    Forbidden    Only admins can update the data
+   * @apiError (Not Found 404)    NotFound     Category does not exist
+   */
+  .patch(authorize(ADMIN), validate(updateCategory), controller.update);
 
 module.exports = router;

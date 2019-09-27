@@ -16,4 +16,20 @@ module.exports = {
   },
 
   // PATCH /v1/categories/:categoryId
+  updateCategory: {
+    body: {
+      englishName: Joi.string()
+        .max(128)
+        .required(),
+      vietnamName: Joi.string()
+        .max(128)
+        .required(),
+      type: Joi.string().valid(Category.types),
+    },
+    params: {
+      categoryId: Joi.string()
+        .regex(/^[a-fA-F0-9]{24}$/)
+        .required(),
+    },
+  },
 };

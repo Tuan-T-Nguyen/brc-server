@@ -29,3 +29,19 @@ exports.create = async (req, res, next) => {
     return next(error);
   }
 };
+/**
+ * Update existing category
+ * @public
+ */
+exports.update = async (req, res, next) => {
+  try {
+    const { categoryId } = req.params;
+    const existCategory = await Category.get(categoryId);
+    const category = Object.assign(existCategory, req.body);
+    const savedCategory = await category.save();
+    res.status(httpStatus.OK);
+    return res.json(savedCategory.transform());
+  } catch (error) {
+    return next(error);
+  }
+};
