@@ -4,7 +4,7 @@ import controller from '../../controllers/category.controller';
 
 const {
   createCategory,
-  updateCategory
+  updateCategory,
 } = require('../../validations/category.validation');
 const { authorize, ADMIN } = require('../../middlewares/auth');
 
