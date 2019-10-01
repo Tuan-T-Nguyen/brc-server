@@ -18,4 +18,15 @@ module.exports = {
       name: Joi.string(),
     },
   },
+
+  // POST /v1/authors
+  createAuthor: {
+    body: {
+      name: Joi.string().required(),
+      description: Joi.string(),
+      avatarUrls: Joi.array().items(Joi.string().uri()),
+      bornDate: Joi.date(),
+      dieDate: Joi.date(),
+    },
+  },
 };

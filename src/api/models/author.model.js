@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const { omitBy, isNil } = require('lodash');
+const { omitBy, isNil, isEmpty } = require('lodash');
 
 const authorSchema = new mongoose.Schema(
   {
@@ -54,8 +54,8 @@ authorSchema.statics = {
   /**
    * List authors has paging in descending order of 'createdAt' timestamp
    */
-  listPaging({ page = 1, perPage = 30, name }) {
-    const options = omitBy({ name }, isNil);
+  listPaging({ page = 1, perPage = 30, search }) {
+    const options = search ? { name: { $regex: search, $options: 'i' } } : {};
     return this.find(options)
       .sort({ createdAt: -1 })
       .skip(perPage * (page - 1))

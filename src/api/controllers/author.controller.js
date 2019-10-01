@@ -1,3 +1,4 @@
+import httpStatus from 'http-status';
 import Author from '../models/author.model';
 
 /**
@@ -21,6 +22,20 @@ exports.list = async (req, res, next) => {
     const authors = await Author.list(req.query);
     const transformedAuthors = authors.map((author) => author.transform());
     return res.json(transformedAuthors);
+  } catch (error) {
+    return next(error);
+  }
+};
+/**
+ * Create new author
+ * @public
+ */
+exports.create = async (req, res, next) => {
+  try {
+    const author = new Author(req.body);
+    const savedAuthor = await author.save();
+    res.status(httpStatus.OK);
+    return res.json(savedAuthor.transform());
   } catch (error) {
     return next(error);
   }
